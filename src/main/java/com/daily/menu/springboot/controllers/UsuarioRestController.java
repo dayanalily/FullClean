@@ -43,6 +43,7 @@ import com.daily.menu.springboot.models.entity.Usuario;
 
 import email.EmailBody;
 
+
 @CrossOrigin(origins = { "http://localhost:4200", "*" })
 @RestController
 @RequestMapping("/api")
@@ -56,12 +57,12 @@ public class UsuarioRestController {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private EmailBody  email;
+
 
 	@Autowired
 	private JavaMailSender sender;
+	
+
 
 	/**
 	 * LISTAR
@@ -114,7 +115,7 @@ public class UsuarioRestController {
 	// @RequestBody para recibir un json
 	@PostMapping("/usuario/registrar")
 
-	public ResponseEntity<?> create(@Valid @RequestBody Usuario usuario, BindingResult result) {
+	public ResponseEntity<?> create(@Valid  @RequestBody  Usuario usuario, BindingResult result) {
 		// registro.setCreateAt(new Date());
 		// return registroService.save(registro);
 
@@ -135,14 +136,12 @@ public class UsuarioRestController {
 			String clave = usuario.getPassword();
 			String passwordBcrypt = passwordEncoder.encode(clave);
 			usuario.setPassword(passwordBcrypt);
-			
-			String mensaje =	CrearMensaje(usuario);
-			email.setSubject("Restablecer la contraseña de Daily");
-			email.setContent(mensaje);
-			sendEmail(email);
-			response.put("mensaje", "El email ha sido enviado con èxito!");
-			;
-			usuarioNew = usuarioService.save(usuario);
+			EmailRestController email = new EmailRestController();
+			EmailBody  emailBody = new EmailBody();
+		
+			//  email.sendEmail(emailBody);
+
+			// usuarioNew = usuarioService.save(usuario);
 
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -150,6 +149,7 @@ public class UsuarioRestController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		response.put("mensaje", "El email ha sido enviado con èxito!");
 		response.put("mensaje", "El usuario ha sido creado con èxito!");
 		response.put("registro", usuarioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
@@ -360,7 +360,7 @@ public class UsuarioRestController {
 	}
 
 	
-	public String CrearMensaje(Usuario usuario) {
+	public String CrearMensaje(EmailBody emailBody, Usuario usuario) {
 		
 		String mensaje = "<div style='border: 1px solid #4c309a; border-radius: 30px; width: 431px;text-align: center;position: relative; margin-right: auto; margin-left: auto;'>"
 				+ "<span><img align='center; margin-top: 11px; width: 44px' src='https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTCKbvjdhSWuXxajCVzbgde3wQEUq3rnv_B6g&usqp=CAU'></span>" + "<span><br></span>"

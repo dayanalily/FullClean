@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daily.menu.springboot.models.apirest.models.dao.IUsuarioDao;
-import com.daily.menu.springboot.models.apirest.models.service.UsuarioService;
 import com.daily.menu.springboot.models.entity.Usuario;
-import com.daily.menu.springboot.models.entity.registro;
 
 import email.EmailBody;
 
@@ -41,8 +39,7 @@ public class EmailRestController {
 	@Autowired
 	private IUsuarioDao usuarioDao;
 
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	
 
 	/**
 	 * CREAR
@@ -89,9 +86,49 @@ public class EmailRestController {
 
 	}
 
-	public boolean sendEmail(EmailBody emailBody) {
+	/**
+	 * Enviar Correo 
+	 */
+	// @RequestBody para recibir un json
+	@PostMapping("/enviarEmail")
 
-		return sendEmailTool(emailBody.getContent(), emailBody.getEmail(), emailBody.getSubject());
+	public ResponseEntity<?> EnviarEmail(@RequestBody EmailBody email, Usuario usuario) {
+
+		// EmailBody emailNew = null;
+		Map<String, Object> response = new HashMap<>();
+
+				
+		try {
+
+
+				
+			// String mensaje =	"dayanaa"; // CrearMensaje(email ,  usuario);
+			//	email.setSubject("Restablecer la contraseña de Daily");
+			//	email.setContent(mensaje);
+				sendEmail(email);
+				response.put("mensaje", "El email ha sido enviado con èxito!");
+				
+			
+
+			// emailNew = EmailService.sendEmail(email);
+
+		} catch (DataAccessException e) {
+			// response.put("mensaje", "Error al enviar email");
+			// response.put("error", e.getMessage().concat(":
+			// ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+
+	}
+
+	public boolean sendEmail(EmailBody emailBody) {
+System.out.println(emailBody.getContent());
+System.out.println(emailBody.getEmail());
+System.out.println(emailBody.getSubject());
+
+    return sendEmailTool(emailBody.getContent(), emailBody.getEmail(), emailBody.getSubject());
 	}
 
 	private boolean sendEmailTool(String textMessage, String email, String subject) {
@@ -101,6 +138,7 @@ public class EmailRestController {
 		try {
 			helper.setTo(email);
 			helper.setText(textMessage, true);
+			System.out.println("se imprime el subject" + subject);
 			helper.setSubject(subject);
 			sender.send(message);
 			send = true;

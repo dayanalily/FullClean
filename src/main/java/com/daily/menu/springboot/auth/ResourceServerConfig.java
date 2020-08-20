@@ -29,7 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers(HttpMethod.GET, "/api/registro", "/api/registro/page/**", "/api/uploads/img/**", "/images", "/api/usuario/{id}", "/api/registro/pais").permitAll()
-				.antMatchers(HttpMethod.POST,  "/api/usuario/registrar", "/send/email" , "/oauth/token")
+				.antMatchers(HttpMethod.POST,  "/api/usuario/registrar", "/send/email" , "/oauth/token", "/send/enviarEmail")
 				.permitAll()
 				.antMatchers(HttpMethod.PUT,  "/api/usuario/{id}")
 				.permitAll()
