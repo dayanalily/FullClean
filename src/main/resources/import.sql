@@ -223,9 +223,9 @@ INSERT INTO usuarios (id, email, password, enabled, nombre, apellido, tipo_docum
 INSERT INTO usuarios (id, email, password, enabled, nombre, apellido, tipo_documento, numero_documento, terminos, foto, ocupacion, nombre_empresa, telefono, direccion, cuidad, estado, codigo_postal, linkedink,facebook, instagram, twittter, pais) VALUES (3, 'dailysanemail2@gmail.com', '$2a$10$4jSA6bXlkNAlQLauH5QcXeYLprfT1ZXesT2xt13yrZVhHtbHDr2Ee', 1,'dayanados', 'sanchez', 1, '269624035', true , '', '', '', '', '', '', '', '', '', '', '', '','venezuela');
 
 
-INSERT INTO roles (id, nombre) VALUES (1, 'ROLE_USER');
-INSERT INTO roles (id, nombre) VALUES (2, 'ROLE_ADMIN');
-
+INSERT INTO roles (id, nombre) VALUES (1, 'ROLE_ADMIN');
+INSERT INTO roles (id, nombre) VALUES (2, 'ROLE_COORDINADOR');
+INSERT INTO roles (id, nombre) VALUES (3, 'ROLE_USER');
 
 
 INSERT INTO usuario_roles (usuario_id, role_id) VALUES (1,1);
